@@ -1,5 +1,9 @@
 import { useEffect, useRef } from "react";
 
+const HIGH_COLOR = "#ff3b3b";
+const MEDIUM_COLOR = "#ffaa00";
+const MONO_FONT = "'JetBrains Mono', 'Fira Code', monospace";
+
 export default function DonutChart({ tickets }) {
   const canvasRef = useRef(null);
 
@@ -26,8 +30,8 @@ export default function DonutChart({ tickets }) {
     const innerR = 55;
 
     const slices = [
-      { count: high, color: "#e74c3c", label: "High" },
-      { count: medium, color: "#f39c12", label: "Medium" },
+      { count: high, color: HIGH_COLOR, label: "High" },
+      { count: medium, color: MEDIUM_COLOR, label: "Medium" },
     ];
 
     ctx.clearRect(0, 0, size, size);
@@ -52,7 +56,7 @@ export default function DonutChart({ tickets }) {
       const ly = cy + Math.sin(midAngle) * labelR;
 
       ctx.fillStyle = "#fff";
-      ctx.font = "bold 13px -apple-system, BlinkMacSystemFont, sans-serif";
+      ctx.font = `bold 13px ${MONO_FONT}`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(slice.count, lx, ly);
@@ -61,15 +65,15 @@ export default function DonutChart({ tickets }) {
     }
 
     // Center text
-    ctx.fillStyle = "#333";
-    ctx.font = "bold 28px -apple-system, BlinkMacSystemFont, sans-serif";
+    ctx.fillStyle = "#1a1e2e";
+    ctx.font = `bold 28px ${MONO_FONT}`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(total, cx, cy - 8);
 
-    ctx.fillStyle = "#888";
-    ctx.font = "12px -apple-system, BlinkMacSystemFont, sans-serif";
-    ctx.fillText("tickets", cx, cy + 14);
+    ctx.fillStyle = "#7a829b";
+    ctx.font = `600 10px ${MONO_FONT}`;
+    ctx.fillText("TICKETS", cx, cy + 14);
   }, [high, medium, total]);
 
   return (
@@ -79,11 +83,11 @@ export default function DonutChart({ tickets }) {
         <canvas ref={canvasRef} />
         <div className="donut-legend">
           <div className="legend-item">
-            <span className="legend-dot" style={{ background: "#e74c3c" }} />
+            <span className="legend-dot" style={{ background: HIGH_COLOR }} />
             High ({high})
           </div>
           <div className="legend-item">
-            <span className="legend-dot" style={{ background: "#f39c12" }} />
+            <span className="legend-dot" style={{ background: MEDIUM_COLOR }} />
             Medium ({medium})
           </div>
         </div>

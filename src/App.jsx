@@ -87,9 +87,9 @@ export default function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>SIP Dashboard</h1>
+        <h1>SIP Mission Control</h1>
         <span className="subtitle">
-          Inventory &amp; Purchasing &mdash; Triaging Tickets
+          Inventory &amp; Purchasing // Triaging Queue
         </span>
       </header>
 
