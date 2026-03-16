@@ -6,6 +6,7 @@ const JIRA_BASE = "https://buildops.atlassian.net/browse/";
 
 const COLUMNS = [
   { key: "key", label: "Key", sortable: true },
+  { key: "refCount", label: "Refs", sortable: true },
   { key: "priority", label: "Priority", sortable: true },
   { key: "summary", label: "Summary", sortable: true },
   { key: "themes", label: "Themes", sortable: true },
@@ -19,7 +20,10 @@ function sortTickets(tickets, sortConfig) {
   const sorted = [...tickets].sort((a, b) => {
     let aVal, bVal;
 
-    if (key === "themes") {
+    if (key === "refCount") {
+      aVal = a.refCount || 0;
+      bVal = b.refCount || 0;
+    } else if (key === "themes") {
       aVal = a.themes[0] || "";
       bVal = b.themes[0] || "";
     } else if (key === "priority") {
@@ -73,6 +77,11 @@ function TicketRow({ ticket }) {
         >
           {ticket.key}
         </a>
+      </td>
+      <td className="refs-cell">
+        {ticket.refCount > 0 && (
+          <span className="ref-badge">{ticket.refCount}</span>
+        )}
       </td>
       <td>
         <span className={`priority-badge priority-${ticket.priority.toLowerCase()}`}>
@@ -174,7 +183,7 @@ function GroupRows({ theme, tickets }) {
   return (
     <>
       <tr className="group-header-row">
-        <td colSpan={5}>
+        <td colSpan={6}>
           <span
             className="group-dot"
             style={{ background: theme.color }}

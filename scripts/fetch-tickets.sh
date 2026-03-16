@@ -17,7 +17,7 @@ fi
 export $(grep -E '^(ATLASSIAN_USERNAME|ATLASSIAN_API_TOKEN|JIRA_URL)=' "$ENV_FILE" | xargs)
 
 JQL='project = SIP AND status = Triaging AND "Squad (Multi-Select)[Select List (multiple choices)]" = "Inventory & Purchasing" AND type not in ("Product Question", "Feature Escalation Request") ORDER BY created ASC'
-FIELDS='summary,status,assignee,priority,issuetype,created,updated,description'
+FIELDS='summary,status,assignee,priority,issuetype,created,updated,description,issuelinks'
 
 echo "Fetching SIP tickets from Jira..."
 
@@ -90,6 +90,14 @@ for issue in all_issues:
     elif isinstance(f.get("description"), str):
         desc_text = f["description"]
 
+    # Extract linked issue keys from issuelinks
+    linked_keys = []
+    for link in f.get("issuelinks", []):
+        if "inwardIssue" in link:
+            linked_keys.append(link["inwardIssue"]["key"])
+        elif "outwardIssue" in link:
+            linked_keys.append(link["outwardIssue"]["key"])
+
     normalized.append({
         "key": issue["key"],
         "summary": f.get("summary", ""),
@@ -100,7 +108,19 @@ for issue in all_issues:
         "created": f.get("created", "")[:10],
         "updated": f.get("updated", "")[:10],
         "description": desc_text.strip()[:500],
+        "linkedKeys": linked_keys,
     })
+
+# Compute refCount: how many other tickets in the set link to each ticket
+all_keys = {t["key"] for t in normalized}
+ref_counts = {}
+for t in normalized:
+    for lk in t["linkedKeys"]:
+        if lk in all_keys:
+            ref_counts[lk] = ref_counts.get(lk, 0) + 1
+
+for t in normalized:
+    t["refCount"] = ref_counts.get(t["key"], 0)
 
 with open("$OUTPUT", "w") as out:
     json.dump(normalized, out, indent=2)
