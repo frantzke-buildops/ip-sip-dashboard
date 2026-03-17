@@ -4,7 +4,7 @@ const HIGH_COLOR = "#ff3b3b";
 const MEDIUM_COLOR = "#ffaa00";
 const MONO_FONT = "'JetBrains Mono', 'Fira Code', monospace";
 
-export default function DonutChart({ tickets }) {
+export default function DonutChart({ tickets, darkMode }) {
   const canvasRef = useRef(null);
 
   const high = tickets.filter((t) => t.priority === "High").length;
@@ -64,17 +64,18 @@ export default function DonutChart({ tickets }) {
       startAngle = endAngle;
     }
 
-    // Center text
-    ctx.fillStyle = "#1a1e2e";
+    // Center text — respect dark mode
+    const dark = document.documentElement.dataset.theme === "dark";
+    ctx.fillStyle = dark ? "#e8ecf4" : "#1a1e2e";
     ctx.font = `bold 28px ${MONO_FONT}`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(total, cx, cy - 8);
 
-    ctx.fillStyle = "#7a829b";
+    ctx.fillStyle = dark ? "#5e6882" : "#7a829b";
     ctx.font = `600 10px ${MONO_FONT}`;
     ctx.fillText("TICKETS", cx, cy + 14);
-  }, [high, medium, total]);
+  }, [high, medium, total, darkMode]);
 
   return (
     <div className="donut-container">

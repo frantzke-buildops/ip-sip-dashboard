@@ -135,7 +135,7 @@ export default function App() {
       />
 
       <div className="chart-and-filters">
-        <DonutChart tickets={filtered} />
+        <DonutChart tickets={filtered} darkMode={darkMode} />
         <ThemeFilter
           tickets={rawTickets}
           activeTheme={activeTheme}
