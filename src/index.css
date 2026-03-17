@@ -16,6 +16,7 @@
   --text-muted: #7a829b;
   --surface: #eef1f6;
   --grid-line: rgba(0, 180, 220, 0.06);
+  --alert-medium-text: #c88500;
 
   /* Fonts */
   --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, monospace;
@@ -52,7 +53,7 @@ body {
 .app-header {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   gap: 12px;
   margin-bottom: 28px;
   padding-bottom: 16px;
@@ -86,4 +87,19 @@ body {
   color: var(--text-muted);
   letter-spacing: 1px;
   text-transform: uppercase;
+}
+
+/* ── Dark Mode ── */
+[data-theme="dark"] {
+  --panel-bg: rgba(20, 24, 40, 0.85);
+  --panel-border: rgba(0, 212, 255, 0.22);
+  --panel-border-hover: rgba(0, 212, 255, 0.45);
+  --text-primary: #e8ecf4;
+  --text-secondary: #a8b0cc;
+  --text-muted: #5e6882;
+  --surface: #0d1117;
+  --grid-line: rgba(0, 212, 255, 0.04);
+  --alert-high-bg: rgba(255, 59, 59, 0.12);
+  --alert-medium-bg: rgba(255, 170, 0, 0.12);
+  --alert-medium-text: #e8a020;
 }

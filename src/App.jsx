@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { classifyTicket } from "./themes";
 import { fetchTickets } from "./utils/fetchTickets";
 import StatsRow from "./components/StatsRow";
@@ -17,6 +17,14 @@ export default function App() {
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [refreshing, setRefreshing] = useState(false);
+  const [darkMode, setDarkMode] = useState(
+    () => localStorage.getItem("sip-theme") === "dark"
+  );
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = darkMode ? "dark" : "";
+    localStorage.setItem("sip-theme", darkMode ? "dark" : "light");
+  }, [darkMode]);
 
   const loadTickets = useCallback(() => {
     setError(null);
@@ -95,10 +103,33 @@ export default function App() {
         >
           {refreshing ? "Refreshing..." : "Refresh"}
         </button>
+        <button
+          className="theme-toggle-btn"
+          onClick={() => setDarkMode((d) => !d)}
+          title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+        >
+          {darkMode ? (
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="8" cy="8" r="3.5" stroke="currentColor" strokeWidth="1.5"/>
+              <line x1="8" y1="1" x2="8" y2="2.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <line x1="8" y1="13.5" x2="8" y2="15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <line x1="1" y1="8" x2="2.5" y2="8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <line x1="13.5" y1="8" x2="15" y2="8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <line x1="2.93" y1="2.93" x2="3.99" y2="3.99" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <line x1="12.01" y1="12.01" x2="13.07" y2="13.07" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <line x1="2.93" y1="13.07" x2="3.99" y2="12.01" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <line x1="12.01" y1="3.99" x2="13.07" y2="2.93" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
+          ) : (
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13.5 9.5A6 6 0 0 1 6.5 2.5a6 6 0 1 0 7 7z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          )}
+        </button>
       </header>
 
       <StatsRow
-        tickets={filtered}
+        tickets={rawTickets}
         priorityFilter={priorityFilter}
         onPriorityChange={setPriorityFilter}
       />
