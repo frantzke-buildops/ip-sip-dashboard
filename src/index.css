@@ -50,6 +50,10 @@ body {
 }
 
 .app-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 12px;
   margin-bottom: 28px;
   padding-bottom: 16px;
   border-bottom: 1px solid var(--panel-border);
