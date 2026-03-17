@@ -1,5 +1,6 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { classifyTicket } from "./themes";
+import { fetchTickets } from "./utils/fetchTickets";
 import StatsRow from "./components/StatsRow";
 import DonutChart from "./components/DonutChart";
 import ThemeFilter from "./components/ThemeFilter";
@@ -9,34 +10,31 @@ import "./App.css";
 
 export default function App() {
   const [rawTickets, setRawTickets] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   // Filters
   const [activeTheme, setActiveTheme] = useState(null);
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
 
-  // Load tickets
-  useEffect(() => {
-    fetch("/tickets.json")
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to load tickets.json");
-        return res.json();
-      })
+  const loadTickets = useCallback(() => {
+    setError(null);
+    return fetchTickets()
       .then((data) => {
         const classified = data.map((t) => ({
           ...t,
           themes: classifyTicket(t.summary),
         }));
         setRawTickets(classified);
-        setLoading(false);
       })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
+      .catch((err) => setError(err.message));
   }, []);
+
+  function handleRefresh() {
+    setRefreshing(true);
+    loadTickets().then(() => setRefreshing(false));
+  }
 
   // Filtered tickets
   const filtered = useMemo(() => {
@@ -63,7 +61,7 @@ export default function App() {
     return result;
   }, [rawTickets, activeTheme, priorityFilter, searchQuery]);
 
-  if (loading) {
+  if (refreshing) {
     return (
       <div className="loading">
         <div className="spinner" />
@@ -72,28 +70,38 @@ export default function App() {
     );
   }
 
-  if (error) {
-    return (
-      <div className="error">
-        <h2>Error loading data</h2>
-        <p>{error}</p>
-        <p>
-          Run <code>scripts/fetch-tickets.sh</code> to fetch ticket data.
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div className="app">
+      {error && (
+        <div className="error">
+          <h2>Error loading data</h2>
+          <p>{error}</p>
+          <p>
+            Check that JIRA_URL, ATLASSIAN_USERNAME, and ATLASSIAN_API_TOKEN are
+            set in .env
+          </p>
+        </div>
+      )}
+
       <header className="app-header">
         <h1>SIP Mission Control</h1>
         <span className="subtitle">
           Inventory &amp; Purchasing // Triaging Queue
         </span>
+        <button
+          className="refresh-btn"
+          onClick={handleRefresh}
+          disabled={refreshing}
+        >
+          {refreshing ? "Refreshing..." : "Refresh"}
+        </button>
       </header>
 
-      <StatsRow tickets={filtered} priorityFilter={priorityFilter} onPriorityChange={setPriorityFilter} />
+      <StatsRow
+        tickets={filtered}
+        priorityFilter={priorityFilter}
+        onPriorityChange={setPriorityFilter}
+      />
 
       <div className="chart-and-filters">
         <DonutChart tickets={filtered} />
