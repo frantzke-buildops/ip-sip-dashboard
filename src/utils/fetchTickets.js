@@ -1,5 +1,5 @@
 const JQL =
-  'project = SIP AND status = Triaging AND "Squad (Multi-Select)[Select List (multiple choices)]" = "Inventory & Purchasing" AND type not in ("Product Question", "Feature Escalation Request") ORDER BY created ASC';
+  'project = SIP AND status = "Ready for Triage" AND "Squad (Multi-Select)[Select List (multiple choices)]" = "Inventory & Purchasing" AND type not in ("Product Question", "Feature Escalation Request") ORDER BY created ASC';
 
 const FIELDS =
   "summary,status,assignee,priority,issuetype,created,updated,description,issuelinks";
@@ -19,9 +19,9 @@ function extractDescription(description) {
 
 function normalizeIssue(issue) {
   const f = issue.fields;
-  const linkedKeys = (f.issuelinks ?? []).map(
-    (link) => (link.inwardIssue ?? link.outwardIssue)?.key
-  ).filter(Boolean);
+  const linkedKeys = (f.issuelinks ?? [])
+    .map((link) => (link.inwardIssue ?? link.outwardIssue)?.key)
+    .filter(Boolean);
 
   return {
     key: issue.key,
