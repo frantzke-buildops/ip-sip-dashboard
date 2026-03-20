@@ -30,7 +30,7 @@ A React dashboard for SIP (Support Issue in Production) Jira tickets assigned to
 - **Static totals on filter**: When filtering by priority, Total and other priority counts stay fixed (computed from `rawTickets`). Only the table and donut chart reflect the active filter.
 - **Canvas dark mode**: Canvas ignores CSS variables. `darkMode` is passed as a React prop to `DonutChart` and included in the `useEffect` dependency array so text colors update on theme change.
 - **Jira pagination**: Uses REST API v3 `/rest/api/3/search/jql` with `nextPageToken` pagination.
-- **JQL**: `project = SIP AND status = "Ready for Triage" AND "Squad..." = "Inventory & Purchasing" AND type not in (...) ORDER BY created ASC`
+- **JQL**: `project = SIP AND status = Triaging AND "Squad..." = "Inventory & Purchasing" AND type not in (...) ORDER BY created ASC`
 
 ## File Structure
 
