@@ -30,10 +30,19 @@ export default function App() {
     setError(null);
     return fetchTickets()
       .then((data) => {
-        const classified = data.map((t) => ({
-          ...t,
-          themes: classifyTicket(t.summary),
-        }));
+        const LABEL_THEMES = new Set([
+          "exec-escalation",
+          "manager-escalation",
+          "strategic-account",
+          "reopened",
+        ]);
+        const classified = data.map((t) => {
+          const themes = classifyTicket(t.summary);
+          const labelThemes = (t.labels ?? []).filter((l) =>
+            LABEL_THEMES.has(l),
+          );
+          return { ...t, themes: [...labelThemes, ...themes] };
+        });
         setRawTickets(classified);
       })
       .catch((err) => setError(err.message));

@@ -101,14 +101,26 @@
   letter-spacing: 1.2px;
 }
 
-.stat-total .stat-value { color: var(--text-primary); }
-.stat-total::before { background: var(--accent); }
+.stat-total .stat-value {
+  color: var(--text-primary);
+}
+.stat-total::before {
+  background: var(--accent);
+}
 
-.stat-high .stat-value { color: var(--alert-high); }
-.stat-high::before { background: var(--alert-high); }
+.stat-high .stat-value {
+  color: var(--alert-high);
+}
+.stat-high::before {
+  background: var(--alert-high);
+}
 
-.stat-medium .stat-value { color: var(--alert-medium); }
-.stat-medium::before { background: var(--alert-medium); }
+.stat-medium .stat-value {
+  color: var(--alert-medium);
+}
+.stat-medium::before {
+  background: var(--alert-medium);
+}
 
 .stat-card.clickable {
   cursor: pointer;
@@ -501,7 +513,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .error {
