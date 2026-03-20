@@ -2,7 +2,7 @@ const JQL =
   'project = SIP AND status = "Ready for Triage" AND "Squad (Multi-Select)[Select List (multiple choices)]" = "Inventory & Purchasing" AND type not in ("Product Question", "Feature Escalation Request") ORDER BY created ASC';
 
 const FIELDS =
-  "summary,status,assignee,priority,issuetype,created,updated,description,issuelinks";
+  "summary,status,assignee,priority,issuetype,created,updated,description,issuelinks,labels";
 
 function extractDescription(description) {
   if (!description) return "";
@@ -33,6 +33,7 @@ function normalizeIssue(issue) {
     created: (f.created ?? "").slice(0, 10),
     updated: (f.updated ?? "").slice(0, 10),
     description: extractDescription(f.description),
+    labels: f.labels ?? [],
     linkedKeys,
   };
 }

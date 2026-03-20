@@ -84,7 +84,9 @@ function TicketRow({ ticket }) {
         )}
       </td>
       <td>
-        <span className={`priority-badge priority-${ticket.priority.toLowerCase()}`}>
+        <span
+          className={`priority-badge priority-${ticket.priority.toLowerCase()}`}
+        >
           {ticket.priority}
         </span>
       </td>
@@ -134,8 +136,7 @@ export default function TicketTable({ tickets, activeTheme }) {
   };
 
   const sorted = sortTickets(tickets, sortConfig);
-  const shouldGroup =
-    sortConfig?.key === "themes" && activeTheme === null;
+  const shouldGroup = sortConfig?.key === "themes" && activeTheme === null;
 
   return (
     <div className="table-container">
@@ -184,10 +185,7 @@ function GroupRows({ theme, tickets }) {
     <>
       <tr className="group-header-row">
         <td colSpan={6}>
-          <span
-            className="group-dot"
-            style={{ background: theme.color }}
-          />
+          <span className="group-dot" style={{ background: theme.color }} />
           {theme.label} ({tickets.length})
         </td>
       </tr>

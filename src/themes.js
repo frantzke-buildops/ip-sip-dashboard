@@ -162,6 +162,30 @@ export const THEMES = [
     color: "#cddc39",
     keywords: ["vendor"],
   },
+  {
+    id: "exec-escalation",
+    label: "Exec Escalation",
+    color: "#ef4444",
+    keywords: [],
+  },
+  {
+    id: "manager-escalation",
+    label: "Manager Escalation",
+    color: "#f97316",
+    keywords: [],
+  },
+  {
+    id: "strategic-account",
+    label: "Strategic Account",
+    color: "#3b82f6",
+    keywords: [],
+  },
+  {
+    id: "reopened",
+    label: "Reopened",
+    color: "#a855f7",
+    keywords: [],
+  },
 ];
 
 /**
